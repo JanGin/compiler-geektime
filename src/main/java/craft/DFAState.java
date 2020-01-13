@@ -18,11 +18,23 @@ public enum DFAState {
     LE,         // <=
     EQ,         // ==
     Assignment, // =
+    IF,         // if
+    ELSE,       // else
+    LF_BRACKET, // (
+    RH_BRACKET, // )
+    PLUS,       // +
+    MINUS,      // -
+    MULTIPLE,   // *
+    DIVIDE,     // /
+    PLUSEQ,     // +=
+    MINUSEQ,    // -=
+    SIMICOLON,  // ;
     Int,        // int
+    Int_i, Int_n, Int_t,
     Float,      // float
     Double,     // double
     Char,       // char
-    NumLiteral; //numberic
+    NumLiteral  //numberic
 
     //private String token;
 

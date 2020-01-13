@@ -14,15 +14,16 @@ public class SimpleLexer {
     public static void main(String[] args) {
 
         SimpleLexer lexer = new SimpleLexer();
-        String script1 = "age == 45";
+        //String script1 = "age == 35";
+        //String script2 = "age = 35;";
+        //String script3 = "int age = 35";
+        //String script4 = "int inG = 35";
+        String script5 = "if (age == 35)";
 
-        List<Token> tokens1 = lexer.tokenize(script1);
-        dumpText(tokens1);
+        List<Token> tokens = lexer.tokenize(script5);
+        dumpText(tokens);
 
-        //String script2 = "age = 45";
 
-        //List<Token> tokens2 = lexer.tokenize(script2);
-        //dumpText(tokens2);
 
     }
 
@@ -45,14 +46,51 @@ public class SimpleLexer {
                     state = initToken(ch);
                     break;
                 case Id:
-                    if (isDigit(ch) || isAlpha(ch)) {
-                        tokenText.append(ch);
-                        break;
+                    if (isAlpha(ch) || isDigit(ch)) {
+                        if (ch == 'i') {
+                            state = DFAState.Int_i;
+                            token.setTokenType(TokenType.Int_i);
+                            tokenText.append(ch);
+                            break;
+                        } else {
+                            tokenText.append(ch);
+                            break;
+                        }
                     } else {
                         //重新确定状态
                         state = initToken(ch);
-                        break;
                     }
+                    break;
+                case Int_i:
+                    if (ch == 'f') {
+                        state = DFAState.IF;
+                        token.setTokenType(TokenType.IF);
+                        tokenText.append(ch);
+                    } else if (ch == 'n') {
+                        state = DFAState.Int_n;
+                        token.setTokenType(TokenType.Int_n);
+                        tokenText.append(ch);
+                    } else if (!TokenUtil.isBlank(ch)) {
+                        state = DFAState.Id;
+                        token.setTokenType(TokenType.Identifier);
+                        tokenText.append(ch);
+                    } else {
+                        state = initToken(ch);
+                    }
+                    break;
+                case Int_n:
+                    if (ch == 't') {
+                        state = DFAState.Int_t;
+                        token.setTokenType(TokenType.Int_t);
+                        tokenText.append(ch);
+                    } else if (!TokenUtil.isBlank(ch)) {
+                        state = DFAState.Id;
+                        token.setTokenType(TokenType.Identifier);
+                        tokenText.append(ch);
+                    } else {
+                        state = initToken(ch);
+                    }
+                    break;
                 case GT:
                     if (ch == '=') {
                         state = DFAState.GE;
@@ -83,11 +121,6 @@ public class SimpleLexer {
                         state = initToken(ch);
                     }
                     break;
-                case GE:
-                case LE:
-                case EQ:
-                    state = initToken(ch);
-                    break;
                 case NumLiteral:
                     if (isDigit(ch)) {
                         tokenText.append(ch);
@@ -95,6 +128,21 @@ public class SimpleLexer {
                         state = initToken(ch);
                     }
                     break;
+                case GE:
+                case LE:
+                case EQ:
+                case PLUS:
+                case MINUS:
+                case MULTIPLE:
+                case DIVIDE:
+                case SIMICOLON:
+                case LF_BRACKET:
+                case RH_BRACKET:
+                case Int_t:
+                case IF:
+                    state = initToken(ch);
+                    break;
+
                 default:
                     break;
             }
@@ -123,8 +171,13 @@ public class SimpleLexer {
         DFAState state = DFAState.Initial;
 
         if (isAlpha(ch)) {
-            state = DFAState.Id;
-            token.setTokenType(TokenType.Identifier);
+            if (ch == 'i') {
+                state = DFAState.Int_i;
+                token.setTokenType(TokenType.Int_i);
+            } else {
+                state = DFAState.Id;
+                token.setTokenType(TokenType.Identifier);
+            }
         } else if (isDigit(ch)) {
             state = DFAState.NumLiteral;
             token.setTokenType(TokenType.NumLiteral);
@@ -137,6 +190,27 @@ public class SimpleLexer {
         } else if (ch == '=') {
             state = DFAState.Assignment;
             token.setTokenType(TokenType.Assignment);
+        } else if (ch == '+') {
+            state = DFAState.PLUS;
+            token.setTokenType(TokenType.PLUS);
+        } else if (ch == '-') {
+            state = DFAState.MINUS;
+            token.setTokenType(TokenType.MINUS);
+        } else if (ch == '*') {
+            state = DFAState.MULTIPLE;
+            token.setTokenType(TokenType.MULTIPLE);
+        } else if (ch == '/') {
+            state = DFAState.DIVIDE;
+            token.setTokenType(TokenType.DIVIDE);
+        } else if (ch == ';') {
+            state = DFAState.SIMICOLON;
+            token.setTokenType(TokenType.SEMICOLON);
+        } else if (ch == '(') {
+            state = DFAState.LF_BRACKET;
+            token.setTokenType(TokenType.LF_BRACKET);
+        } else if (ch == ')') {
+            state = DFAState.RH_BRACKET;
+            token.setTokenType(TokenType.RH_BRACKET);
         }
 
         //保存当前值

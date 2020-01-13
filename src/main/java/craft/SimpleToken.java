@@ -2,9 +2,9 @@ package craft;
 
 public class SimpleToken implements Token {
 
-    private TokenType tokenType = null;
+    private TokenType tokenType;
 
-    private String tokenText = null;
+    private String tokenText;
 
     @Override
     public TokenType getTokenType() {

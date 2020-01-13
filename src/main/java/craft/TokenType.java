@@ -11,6 +11,21 @@ public enum TokenType {
     EQ,             // ==
     GE,             // >=
     LE,             // <=
-    Assignment;     // =
-
+    Assignment,     // =
+    PLUS,           // +
+    MINUS,          // -
+    MULTIPLE,       // *
+    DIVIDE,         // /
+    SEMICOLON,      // ;
+    LF_BRACKET,     // (
+    RH_BRACKET,     // )
+    IF,             // if
+    ELSE,           // else
+    Int,            // int
+    Int_i,          //
+    Int_n,          //
+    Int_t,
+    Char,           // char
+    Float,          // float
+    Double          // double
 }
