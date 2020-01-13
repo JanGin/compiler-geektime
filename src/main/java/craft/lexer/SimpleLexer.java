@@ -1,9 +1,9 @@
-package craft;
+package craft.lexer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static craft.TokenUtil.*;
+import static craft.lexer.TokenUtil.*;
 
 public class SimpleLexer {
 

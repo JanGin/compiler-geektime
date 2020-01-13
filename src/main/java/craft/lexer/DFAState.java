@@ -1,4 +1,4 @@
-package craft;
+package craft.lexer;
 
 public enum DFAState {
 
@@ -39,7 +39,7 @@ public enum DFAState {
     //private String token;
 
     /*
-    craft.DFAState(String token) {
+    craft.lexer.DFAState(String token) {
         this.token = token;
     }
     */
