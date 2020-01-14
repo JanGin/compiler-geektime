@@ -18,9 +18,10 @@ public class SimpleLexer {
         //String script2 = "age = 35;";
         //String script3 = "int age = 35";
         //String script4 = "int inG = 35";
-        String script5 = "if (age == 35)";
+        //String script5 = "if (age == 35)";
+        String script6 = "if (age == 35) { b = 1;}";
 
-        List<Token> tokens = lexer.tokenize(script5);
+        List<Token> tokens = lexer.tokenize(script6);
         dumpText(tokens);
 
 
@@ -140,6 +141,8 @@ public class SimpleLexer {
                 case RH_BRACKET:
                 case Int_t:
                 case IF:
+                case LF_BRACE:
+                case RH_BRACE:
                     state = initToken(ch);
                     break;
 
@@ -211,6 +214,12 @@ public class SimpleLexer {
         } else if (ch == ')') {
             state = DFAState.RH_BRACKET;
             token.setTokenType(TokenType.RH_BRACKET);
+        } else if (ch == '{') {
+            state = DFAState.LF_BRACE;
+            token.setTokenType(TokenType.LF_BRACE);
+        } else if (ch == '}') {
+            state = DFAState.RH_BRACE;
+            token.setTokenType(TokenType.RH_BRACE);
         }
 
         //保存当前值

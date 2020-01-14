@@ -19,6 +19,8 @@ public enum TokenType {
     SEMICOLON,      // ;
     LF_BRACKET,     // (
     RH_BRACKET,     // )
+    LF_BRACE,       // {
+    RH_BRACE,       // }
     IF,             // if
     ELSE,           // else
     Int,            // int

@@ -26,6 +26,8 @@ public enum DFAState {
     MINUS,      // -
     MULTIPLE,   // *
     DIVIDE,     // /
+    LF_BRACE,
+    RH_BRACE,
     PLUSEQ,     // +=
     MINUSEQ,    // -=
     SIMICOLON,  // ;
