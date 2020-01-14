@@ -1,4 +1,4 @@
-package craft.lexer;
+package craft.base;
 
 public enum TokenType {
 

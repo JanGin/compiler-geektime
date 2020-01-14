@@ -1,9 +1,18 @@
 package craft.lexer;
 
+import craft.base.DFAState;
+import craft.base.SimpleToken;
+import craft.base.Token;
+import craft.base.TokenType;
+import craft.util.SimpleTokenReader;
+import craft.util.TokenReader;
+import craft.util.TokenUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-import static craft.lexer.TokenUtil.*;
+import static craft.util.TokenUtil.*;
 
 public class SimpleLexer {
 
@@ -21,7 +30,8 @@ public class SimpleLexer {
         //String script5 = "if (age == 35)";
         String script6 = "if (age == 35) { b = 1;}";
 
-        List<Token> tokens = lexer.tokenize(script6);
+        //List<Token> tokens = lexer.tokenize(script6);
+        TokenReader tokens = lexer.tokenize(script6);
         dumpText(tokens);
 
 
@@ -30,7 +40,8 @@ public class SimpleLexer {
 
 
     //文本解析成token列表
-    public List<Token> tokenize(String text) {
+    //修改为返回TokenStream, 由TokenReader封装
+    public TokenReader tokenize(String text) {
         //初始化工作
         token = new SimpleToken();
         tokens = new ArrayList<>();
@@ -155,7 +166,7 @@ public class SimpleLexer {
             initToken('0');
         }
 
-        return tokens;
+        return new SimpleTokenReader(tokens);
     }
 
     //确定 token的初始状态, 并保存当前读到的token值
@@ -234,6 +245,14 @@ public class SimpleLexer {
             for (Token token : list) {
                 System.out.println(token.getTokenText()+"\t\t"+token.getTokenType());
             }
+        }
+    }
+
+    public static void dumpText(TokenReader reader) {
+        System.out.println("[text]\t[type]");
+        Token token = null;
+        while (Objects.nonNull(token = reader.read())) {
+            System.out.println(token.getTokenText()+"\t\t"+token.getTokenType());
         }
     }
 }

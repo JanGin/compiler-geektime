@@ -1,4 +1,4 @@
-package craft.lexer;
+package craft.util;
 
 public class TokenUtil {
 
