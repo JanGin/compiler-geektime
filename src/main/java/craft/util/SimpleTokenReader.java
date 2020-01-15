@@ -12,7 +12,7 @@ public class SimpleTokenReader implements TokenReader {
     private List<Token> tokens;
 
     public SimpleTokenReader(List<Token> tokens) {
-        position = 0;
+        this.position = 0;
         this.tokens = tokens;
     }
 
@@ -40,11 +40,13 @@ public class SimpleTokenReader implements TokenReader {
 
     @Override
     public void setPosition(int position) {
-
+        if (position < tokens.size() && position >= 0) {
+            this.position = position;
+        }
     }
 
     @Override
     public int getPosition() {
-        return 0;
+        return this.position;
     }
 }

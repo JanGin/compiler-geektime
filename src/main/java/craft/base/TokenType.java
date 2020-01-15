@@ -26,7 +26,6 @@ public enum TokenType {
     Int,            // int
     Int_i,          //
     Int_n,          //
-    Int_t,
     Char,           // char
     Float,          // float
     Double          // double

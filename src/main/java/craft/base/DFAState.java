@@ -32,11 +32,11 @@ public enum DFAState {
     MINUSEQ,    // -=
     SIMICOLON,  // ;
     Int,        // int
-    Int_i, Int_n, Int_t,
+    Int_i, Int_n,
     Float,      // float
     Double,     // double
     Char,       // char
-    NumLiteral  //numberic
+    IntLiteral  //int
 
     //private String token;
 

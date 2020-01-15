@@ -32,7 +32,7 @@ public class SimpleLexer {
 
         //List<Token> tokens = lexer.tokenize(script6);
         TokenReader tokens = lexer.tokenize(script6);
-        dumpText(tokens);
+        lexer.dumpText(tokens);
 
 
 
@@ -92,8 +92,8 @@ public class SimpleLexer {
                     break;
                 case Int_n:
                     if (ch == 't') {
-                        state = DFAState.Int_t;
-                        token.setTokenType(TokenType.Int_t);
+                        state = DFAState.Int;
+                        token.setTokenType(TokenType.Int);
                         tokenText.append(ch);
                     } else if (!TokenUtil.isBlank(ch)) {
                         state = DFAState.Id;
@@ -133,7 +133,7 @@ public class SimpleLexer {
                         state = initToken(ch);
                     }
                     break;
-                case NumLiteral:
+                case IntLiteral:
                     if (isDigit(ch)) {
                         tokenText.append(ch);
                     } else {
@@ -150,7 +150,7 @@ public class SimpleLexer {
                 case SIMICOLON:
                 case LF_BRACKET:
                 case RH_BRACKET:
-                case Int_t:
+                case Int:
                 case IF:
                 case LF_BRACE:
                 case RH_BRACE:
@@ -193,8 +193,8 @@ public class SimpleLexer {
                 token.setTokenType(TokenType.Identifier);
             }
         } else if (isDigit(ch)) {
-            state = DFAState.NumLiteral;
-            token.setTokenType(TokenType.NumLiteral);
+            state = DFAState.IntLiteral;
+            token.setTokenType(TokenType.IntLiteral);
         } else if (ch == '>') {
             state = DFAState.GT;
             token.setTokenType(TokenType.GT);
@@ -249,7 +249,7 @@ public class SimpleLexer {
         }
     }
 
-    public static void dumpText(TokenReader reader) {
+    public void dumpText(TokenReader reader) {
         System.out.println("[text]\t[type]");
         Token token = null;
         while (Objects.nonNull(token = reader.read())) {
