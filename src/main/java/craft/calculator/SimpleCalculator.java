@@ -6,10 +6,10 @@ import craft.base.SimpleASTNode;
 import craft.base.Token;
 import craft.exception.MyParseException;
 import craft.util.TokenReader;
-import craft.util.TokenUtil;
-
 
 import java.util.Objects;
+
+import static craft.util.TokenUtil.*;
 
 public class SimpleCalculator {
 
@@ -23,17 +23,17 @@ public class SimpleCalculator {
     public SimpleASTNode primary(TokenReader reader) throws MyParseException {
         SimpleASTNode node = null;
         Token token = reader.peek();
-        if (TokenUtil.isIdentifier(token)) {
+        if (isIdentifier(token)) {
             node = new SimpleASTNode(ASTNodeType.Identifier, token.getTokenText());
-        } else if (TokenUtil.isIntLiteral(token)) {
+        } else if (isIntLiteral(token)) {
             node = new SimpleASTNode(ASTNodeType.IntLiteral, token.getTokenText());
-        } else if (TokenUtil.isLeftBracket(token)) {
+        } else if (isLeftBracket(token)) {
             token = reader.read();
             node = additive(reader);
 
             if (Objects.nonNull(node)) {
                 token = reader.peek();      //继续往下解析
-                if (TokenUtil.isRightBracket(token)) {
+                if (isRightBracket(token)) {
                     token = reader.read();
                 } else {
                     throw new MyParseException("expect right bracket ')' here");
@@ -55,7 +55,7 @@ public class SimpleCalculator {
         SimpleASTNode child1 = multiplicative(reader);
         SimpleASTNode node = child1;
         Token token = reader.peek();
-        if (TokenUtil.isAdditive(token) || TokenUtil.isMinus(token)) {
+        if (isAdditive(token) || isMinus(token)) {
             token = reader.read();
             SimpleASTNode child2 = additive(reader);
             if (Objects.nonNull(child2)) {
@@ -80,7 +80,7 @@ public class SimpleCalculator {
         //
         SimpleASTNode node = child1;
         Token token = reader.peek();
-        if (TokenUtil.isMultiple(token) || TokenUtil.isDivide(token)) {
+        if (isMultiple(token) || isDivide(token)) {
             token = reader.read();
             SimpleASTNode child2 = primary(reader);
             if (Objects.nonNull(child2)) {
@@ -102,13 +102,13 @@ public class SimpleCalculator {
     public SimpleASTNode intDeclaration(TokenReader reader) throws MyParseException {
         SimpleASTNode node = null;
         Token token = reader.peek();        //预读
-        if (TokenUtil.isInt(token)) {
+        if (isInt(token)) {
             token = reader.read();          //读出int
-            if (TokenUtil.isIdentifier(reader.peek())) {    //接着读
+            if (isIdentifier(reader.peek())) {    //接着读
                 token = reader.read();      //读出标识符
                 /*此处只建立表达式子节点*/
                 node = new SimpleASTNode(ASTNodeType.IntDeclaration, token.getTokenText());
-                if (TokenUtil.isAssignment(reader.peek())) {
+                if (isAssignment(reader.peek())) {
                     token = reader.read();   //读出 =
                     SimpleASTNode child = additive(reader);   //此处期待一个表达式，并返回一个AST节点
                     if (Objects.nonNull(child)) {
@@ -124,7 +124,7 @@ public class SimpleCalculator {
             if (Objects.nonNull(node)) {
                 // 读取 ;
                 token = reader.peek();
-                if (TokenUtil.isSemiColon(reader.peek())) {
+                if (isSemiColon(reader.peek())) {
                     token = reader.read();
                 } else {
                     throw new MyParseException("Invalid statement, semicolon ';' is excepted");
