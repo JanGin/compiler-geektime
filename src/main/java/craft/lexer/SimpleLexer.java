@@ -28,7 +28,7 @@ public class SimpleLexer {
         //String script3 = "int age = 35";
         //String script4 = "int inG = 35";
         //String script5 = "if (age == 35)";
-        String script6 = "if (age == 35) { b = 1;}";
+        String script6 = "if (age == 35) { int b = 1;}";
 
         //List<Token> tokens = lexer.tokenize(script6);
         TokenReader tokens = lexer.tokenize(script6);
@@ -218,7 +218,7 @@ public class SimpleLexer {
             token.setTokenType(TokenType.DIVIDE);
         } else if (ch == ';') {
             state = DFAState.SIMICOLON;
-            token.setTokenType(TokenType.SEMICOLON);
+            token.setTokenType(TokenType.SemiColon);
         } else if (ch == '(') {
             state = DFAState.LF_BRACKET;
             token.setTokenType(TokenType.LF_BRACKET);
@@ -239,6 +239,7 @@ public class SimpleLexer {
 
     }
 
+    @Deprecated
     public static void dumpText(List<Token> list) {
         System.out.println("[text]\t[type]");
         if (list != null && list.size() > 0) {

@@ -4,7 +4,7 @@ public enum TokenType {
 
 
     Identifier,     //标识符，关键字
-    NumLiteral,     //数字型字面量
+    IntLiteral,     //整型字面量
     StrLiteral,     //字符串型字面量
     GT,             // >
     LT,             // <
@@ -16,7 +16,7 @@ public enum TokenType {
     MINUS,          // -
     MULTIPLE,       // *
     DIVIDE,         // /
-    SEMICOLON,      // ;
+    SemiColon,      // ;
     LF_BRACKET,     // (
     RH_BRACKET,     // )
     LF_BRACE,       // {

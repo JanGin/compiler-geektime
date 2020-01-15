@@ -13,5 +13,7 @@ public enum ASTNodeType {
     Multiplicative,     // 乘法表达式
 
     Identifier,         // 标识符，关键字
-    NumLiteral          // 数字型字面量
+    IntLiteral,          // 整型字面量
+    LeftBracket,        // 左括号 (
+    RightBracket        //右括号  )
 }

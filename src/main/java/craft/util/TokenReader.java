@@ -8,7 +8,7 @@ import craft.base.Token;
 public interface TokenReader {
 
     /**
-     * retrieve a token from token stream
+     * read a token from token stream and push the position to point to next one
      * @return
      */
     Token read();
