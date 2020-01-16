@@ -21,31 +21,33 @@ public class SimpleCalculator {
 
 
     public static void main(String[] args) throws MyParseException {
-        String script1 = "int a = b + 2;";
         SimpleLexer lexer = new SimpleLexer();
         SimpleCalculator cal = new SimpleCalculator();
-        TokenReader tokenReader = lexer.tokenize(script1);
+        //String script1 = "int a = b + 2;";
+        //TokenReader tokenReader = lexer.tokenize(script1);
         /*System.out.println("script1词法解析结果：");
         lexer.dumpText(tokenReader);
         tokenReader.setPosition(0);
         */
-        SimpleASTNode node = cal.intDeclaration(tokenReader);
-        cal.dumpText(node, "");
-        String script2 = "2 + 3 * 6";
-        tokenReader = lexer.tokenize(script2);
+        //SimpleASTNode node = cal.intDeclaration(tokenReader);
+        //cal.dumpText(node, "");
+        //String script2 = "2 + 3 * 6";
+        //tokenReader = lexer.tokenize(script2);
         //System.out.println("script2词法解析结果：");
         //lexer.dumpText(tokenReader);
         //tokenReader.setPosition(0);
-        SimpleASTNode node2 = cal.additive(tokenReader);
-        cal.dumpText(node2, "");
+        //SimpleASTNode node2 = cal.additive(tokenReader);
+        //cal.dumpText(node2, "");
 
         //String script3 = "2 + 3 * 5";         //Result: 17
-        String script3 = "1 + 2 + 3";           //FIXME 此处有结合性问题，先算得5，再算得6
-        tokenReader = lexer.tokenize(script3);
-        SimpleASTNode node3 = cal.additive(tokenReader);
-        cal.calculate(node3, "");
+        String script3 = "1 + 2 + 3";           //DoneFIXME 此处有结合性问题，先算得5，再算得6
+        String script7 = "1 + 2 + 3 + 4";
+        TokenReader tokenReader = lexer.tokenize(script7);
+        SimpleASTNode node7 = cal.additive(tokenReader);
+        cal.dumpText(node7, "");
+        cal.calculate(node7, "");
 
-        //以下测试异常状况
+        /*以下测试异常状况*/
 
         String script4 = "2 +";         //expect right part of the expression after '+' here
         //tokenReader = lexer.tokenize(script4);
@@ -104,10 +106,12 @@ public class SimpleCalculator {
      * @return
      */
     public SimpleASTNode additive(TokenReader reader) throws MyParseException {
+
+         /*
         SimpleASTNode child1 = multiplicative(reader);
         SimpleASTNode node = child1;
         Token token = reader.peek();
-        if (isAdditive(token) || isMinus(token)) {
+        if (isPlus(token) || isMinus(token)) {
             token = reader.read();      //消耗掉这个token
             SimpleASTNode child2 = additive(reader);
             if (Objects.nonNull(child2)) {
@@ -116,14 +120,39 @@ public class SimpleCalculator {
                 node.addChild(child2);
             } else {
                 String symbol = null;
-                if (isAdditive(token))
+                if (isPlus(token))
                     symbol = "+";
                 else
                     symbol = "-";
 
                 throw new MyParseException("Invalid expression, expect right part of the expression after '"+ symbol +"' here");
             }
+        }*/
+
+        // 上面采用的文法为   add := mul | mul + add, 存在结合性问题
+        // 应修改为    add :=  mul (+ mul)*
+        // 也即 add := mul | add'
+        //     add' := + mul add' | ε (epsilon)
+        // 采用非递归方式消除左递归带来的结合性问题
+        SimpleASTNode child1 = multiplicative(reader);
+        SimpleASTNode node = child1;
+        if (Objects.nonNull(child1)) {
+            while (true) {
+                //循环运用 mul (+ mul)* 中的   (+ mul)*
+                Token token = reader.peek();
+                if (isPlus(token) || isMinus(token)) {
+                    token = reader.read();
+                    SimpleASTNode child2 = multiplicative(reader);
+                    node = new SimpleASTNode(ASTNodeType.Additive, token.getTokenText());
+                    node.addChild(child1);      //新节点在顶层，以确保结合性
+                    node.addChild(child2);
+                    child1 = node;          // confused here
+                } else {
+                    break;
+                }
+            }
         }
+
         return node;
     }
 
@@ -179,7 +208,7 @@ public class SimpleCalculator {
                     if (Objects.nonNull(child)) {
                         node.addChild(child);
                     } else {
-                        throw new MyParseException("Invalid variable initialization, expression Statement is expected");
+                        throw new MyParseException("Invalid variable initialization, expression statement is expected");
                     }
                 }
             } else {
@@ -207,7 +236,7 @@ public class SimpleCalculator {
     public int calculate(ASTNode node, String indent) {
         int result = 0;
         int res1 = 0, res2 = 0;
-        System.out.printf("%s calculating: %s", indent, node.getType());
+        System.out.println(indent + "calculating: " + node.getType() + ":" + node.getText());
         switch(node.getType()) {
             case Program:
                 for (ASTNode child : node.children()) {

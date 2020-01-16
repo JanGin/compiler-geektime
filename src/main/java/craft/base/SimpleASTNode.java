@@ -48,4 +48,13 @@ public class SimpleASTNode implements ASTNode {
     public List<ASTNode> children() {
         return this.readOnlyChildren;
     }
+
+    @Override
+    public String toString() {
+        return "SimpleASTNode{" +
+                "parent=" + parent +
+                ", type=" + type +
+                ", text='" + text + '\'' +
+                '}';
+    }
 }

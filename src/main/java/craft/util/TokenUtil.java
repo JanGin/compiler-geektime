@@ -55,7 +55,7 @@ public class TokenUtil {
         return Objects.nonNull(token) && TokenType.DIVIDE.equals(token.getTokenType());
     }
 
-    public static boolean isAdditive(Token token) {
+    public static boolean isPlus(Token token) {
         return Objects.nonNull(token) && TokenType.PLUS.equals(token.getTokenType());
     }
 
