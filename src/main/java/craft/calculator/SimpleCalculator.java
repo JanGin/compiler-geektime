@@ -42,10 +42,10 @@ public class SimpleCalculator {
         //String script3 = "2 + 3 * 5";         //Result: 17
         String script3 = "1 + 2 + 3";           //DoneFIXME 此处有结合性问题，先算得5，再算得6
         String script7 = "1 + 2 + 3 + 4";
-        TokenReader tokenReader = lexer.tokenize(script7);
-        SimpleASTNode node7 = cal.additive(tokenReader);
-        cal.dumpText(node7, "");
-        cal.calculate(node7, "");
+        //TokenReader tokenReader = lexer.tokenize(script7);
+        //SimpleASTNode node7 = cal.additive(tokenReader);
+        //cal.dumpText(node7, "");
+        cal.eval(script7);
 
         /*以下测试异常状况*/
 
@@ -67,8 +67,46 @@ public class SimpleCalculator {
     }
 
     /**
+     * 计算表达式的值，并输出AST和计算过程
+     * @param script    input text
+     */
+    public void eval(String script) throws MyParseException {
+        SimpleASTNode tree = parse(script);
+        dumpText(tree, "");
+        calculate(tree, "");
+    }
+
+
+    /**
+     * 解析输入的script, 返回AST的根结点
+     * @param script    input text
+     */
+    private SimpleASTNode parse(String script) throws MyParseException {
+        SimpleLexer lexer = new SimpleLexer();
+        TokenReader reader = lexer.tokenize(script);
+        SimpleASTNode root = buildASTRoot(reader);
+        return root;
+    }
+
+
+    /**
+     * 构造程序AST的根结点
+     * @param reader    token stream
+     * @return
+     */
+    public SimpleASTNode buildASTRoot(TokenReader reader) throws MyParseException {
+
+        SimpleASTNode root = new SimpleASTNode(ASTNodeType.Program, "SimpleCalculator");
+        SimpleASTNode child = additive(reader);
+        if (Objects.nonNull(child))
+            root.addChild(child);
+
+        return root;
+    }
+
+    /**
      * 解析基础表达式
-     * @param reader
+     * @param reader    token stream
      * @return
      * @throws MyParseException
      */
@@ -102,7 +140,7 @@ public class SimpleCalculator {
 
     /**
      * 解析加法表达式
-     * @param reader
+     * @param reader    token stream
      * @return
      */
     public SimpleASTNode additive(TokenReader reader) throws MyParseException {
@@ -159,7 +197,7 @@ public class SimpleCalculator {
 
     /**
      * 解析乘除法表达式
-     * @param reader
+     * @param reader    token stream
      * @return
      */
     public SimpleASTNode multiplicative(TokenReader reader) throws MyParseException {
@@ -190,7 +228,7 @@ public class SimpleCalculator {
 
     /**
      * 整型表达式
-     * @param reader
+     * @param reader  token stream
      * @return
      */
     public SimpleASTNode intDeclaration(TokenReader reader) throws MyParseException {
@@ -236,7 +274,7 @@ public class SimpleCalculator {
     public int calculate(ASTNode node, String indent) {
         int result = 0;
         int res1 = 0, res2 = 0;
-        System.out.println(indent + "calculating: " + node.getType() + ":" + node.getText());
+        System.out.println(indent + node.getType() + ":" + node.getText());
         switch(node.getType()) {
             case Program:
                 for (ASTNode child : node.children()) {
