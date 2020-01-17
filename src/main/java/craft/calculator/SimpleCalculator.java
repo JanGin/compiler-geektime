@@ -153,7 +153,7 @@ public class SimpleCalculator {
             token = reader.read();      //消耗掉这个token
             SimpleASTNode child2 = additive(reader);
             if (Objects.nonNull(child2)) {
-                node = new SimpleASTNode(ASTNodeType.Additive, token.getTokenText());
+                node = new SimpleASTNode(ASTNodeType.AdditiveExpr, token.getTokenText());
                 node.addChild(child1);
                 node.addChild(child2);
             } else {
@@ -181,7 +181,7 @@ public class SimpleCalculator {
                 if (isPlus(token) || isMinus(token)) {
                     token = reader.read();
                     SimpleASTNode child2 = multiplicative(reader);
-                    node = new SimpleASTNode(ASTNodeType.Additive, token.getTokenText());
+                    node = new SimpleASTNode(ASTNodeType.AdditiveExpr, token.getTokenText());
                     node.addChild(child1);      //新节点在顶层，以确保结合性
                     node.addChild(child2);
                     child1 = node;          // confused here
@@ -210,7 +210,7 @@ public class SimpleCalculator {
                 token = reader.read();
                 SimpleASTNode child2 = primary(reader);
                 if (Objects.nonNull(child2)) {
-                    node = new SimpleASTNode(ASTNodeType.Multiplicative, token.getTokenText());
+                    node = new SimpleASTNode(ASTNodeType.MultiplicativeExpr, token.getTokenText());
                     node.addChild(child1);
                     node.addChild(child2);
                 } else {
@@ -281,7 +281,7 @@ public class SimpleCalculator {
                     result = calculate(child, indent + "\t");
                 }
                 break;
-            case Additive:
+            case AdditiveExpr:
                 res1 = calculate(node.children().get(0), indent + "\t");
                 res2 = calculate(node.children().get(1), indent + "\t");
                 if ("+".equals(node.getText())) {
@@ -290,7 +290,7 @@ public class SimpleCalculator {
                     result = res1 - res2;
                 }
                 break;
-            case Multiplicative:
+            case MultiplicativeExpr:
                 res1 = calculate(node.children().get(0), indent + "\t");
                 res2 = calculate(node.children().get(1), indent + "\t");
                 if ("*".equals(node.getText())) {

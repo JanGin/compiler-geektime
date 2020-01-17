@@ -9,8 +9,8 @@ public enum ASTNodeType {
 
 
     PrimaryStmt,        // 基础表达式
-    Additive,           // 加法表达式
-    Multiplicative,     // 乘法表达式
+    AdditiveExpr,           // 加法表达式
+    MultiplicativeExpr,     // 乘法表达式
 
     Identifier,         // 标识符，关键字
     IntLiteral,          // 整型字面量
