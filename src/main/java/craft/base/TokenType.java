@@ -21,6 +21,8 @@ public enum TokenType {
     RH_BRACKET,     // )
     LF_BRACE,       // {
     RH_BRACE,       // }
+    DBPLUS,         // ++
+    DBMINUS,        // --
     IF,             // if
     ELSE,           // else
     Int,            // int

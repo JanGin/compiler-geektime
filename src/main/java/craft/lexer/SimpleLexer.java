@@ -28,13 +28,11 @@ public class SimpleLexer {
         //String script3 = "int age = 35";
         //String script4 = "int inG = 35";
         //String script5 = "if (age == 35)";
-        String script6 = "if (age == 35) { int b = 1;}";
-
+        //String script6 = "if (age == 35) { int b = 1;}";
+        String script7 = "int a = b--;";
         //List<Token> tokens = lexer.tokenize(script6);
-        TokenReader tokens = lexer.tokenize(script6);
+        TokenReader tokens = lexer.tokenize(script7);
         lexer.dumpText(tokens);
-
-
 
     }
 
@@ -140,11 +138,29 @@ public class SimpleLexer {
                         state = initToken(ch);
                     }
                     break;
+                case PLUS:
+                    if (ch == '+') {
+                        state = DFAState.DBPLUS;
+                        token.setTokenType(TokenType.DBPLUS);
+                        tokenText.append(ch);
+                    } else {
+                        state = initToken(ch);
+                    }
+                    break;
+                case MINUS:
+                    if (ch == '-') {
+                        state = DFAState.DBMINUS;
+                        token.setTokenType(TokenType.DBMINUS);
+                        tokenText.append(ch);
+                    } else {
+                        state = initToken(ch);
+                    }
+                    break;
                 case GE:
                 case LE:
                 case EQ:
-                case PLUS:
-                case MINUS:
+                case DBPLUS:
+                case DBMINUS:
                 case MULTIPLE:
                 case DIVIDE:
                 case SIMICOLON:
