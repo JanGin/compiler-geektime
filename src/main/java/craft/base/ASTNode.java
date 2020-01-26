@@ -12,4 +12,9 @@ public interface ASTNode {
 
     List<ASTNode> children();
 
+    /*
+    default boolean isNotEmpty(Collection<ASTNode> coll) {
+        return coll != null && coll.size() > 0;
+    }*/
+
 }
