@@ -1,5 +1,7 @@
 package craft.repl;
 
+import craft.base.ASTNode;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -32,11 +34,11 @@ public class SimpleREPL {
                 }
 
                 script += line + LINE;
-                /*ASTNode tree = parser.parse(script);
+                ASTNode tree = parser.parse(script);
                 if (verbose) {
                     parser.dumpText(tree, "");
-                }*/
-                parser.eval(script);          //will print result to standard in
+                }
+                parser.eval(tree, "");          //will print result to standard in
                 System.out.print(bash);
 
                 script = "";
