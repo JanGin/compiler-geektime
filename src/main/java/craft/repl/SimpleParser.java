@@ -49,11 +49,11 @@ public class SimpleParser {
         while (Objects.nonNull(stream.peek())) {
             SimpleASTNode node = intDeclaration(stream);
             if (Objects.isNull(node)) {
-                node = assignmentStmt(stream);
+                node = expressionStmt(stream);
             }
 
             if (Objects.isNull(node)) {
-                node = expressionStmt(stream);
+                node = assignmentStmt(stream);
             }
 
             if (Objects.nonNull(node)) {
@@ -86,10 +86,10 @@ public class SimpleParser {
                 } else {
                     throw new MyParseException("Invalid statement, semicolon ';' is excepted");
                 }
+            } else {
+                stream.unread();        //backtrace
+                node = null;
             }
-        } else {
-            stream.unread();        //backtrace
-            node = null;
         }
 
         return node;
@@ -125,13 +125,13 @@ public class SimpleParser {
             token = stream.read();
             node = new SimpleASTNode(ASTNodeType.IntLiteral, token.getTokenText());
         } else if (isLeftBracket(token)) {
-            token = stream.read();
+            stream.read();
             node = additive(stream);
 
             if (Objects.nonNull(node)) {
                 token = stream.peek();      //继续往下解析
                 if (isRightBracket(token)) {
-                    token = stream.read();
+                    stream.read();
                 } else {
                     throw new MyParseException("expect right bracket ')' here");
                 }
@@ -196,7 +196,7 @@ public class SimpleParser {
                     node.addChild(child1);
                     node.addChild(child2);
                 } else {
-                    String symbol = null;
+                    String symbol;
                     if (isMultiple(token))
                         symbol = "*";
                     else

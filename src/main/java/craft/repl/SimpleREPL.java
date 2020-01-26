@@ -38,7 +38,8 @@ public class SimpleREPL {
                 if (verbose) {
                     parser.dumpText(tree, "");
                 }
-                parser.eval(tree, "");          //will print result to standard in
+                int result = parser.eval(tree, "");
+                System.out.print(bash+result);
                 System.out.print(bash);
 
                 script = "";
