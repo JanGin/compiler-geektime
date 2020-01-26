@@ -31,7 +31,11 @@ public class SimpleParser {
      */
     public void eval(String script) throws MyParseException {
         SimpleASTNode tree = parse(script);
-        calculate(tree, "");
+        if (verbose) {
+            dumpText(tree, "");
+        }
+        int result = calculate(tree, "");
+        System.out.println(result);
     }
 
 
@@ -39,7 +43,7 @@ public class SimpleParser {
      * 解析输入的script, 返回AST的根结点
      * @param script    input text
      */
-    public SimpleASTNode parse(String script) throws MyParseException {
+    private SimpleASTNode parse(String script) throws MyParseException {
         SimpleLexer lexer = new SimpleLexer();
         TokenReader reader = lexer.tokenize(script);
         SimpleASTNode root = buildASTRoot(reader);
@@ -206,7 +210,7 @@ public class SimpleParser {
      * 计算某个节点的值
      * @return
      */
-    public int calculate(ASTNode node, String indent) {
+    public int calculate(ASTNode node, String indent) throws MyParseException {
         int result = 0;
         int res1 = 0, res2 = 0;
         switch(node.getType()) {
@@ -239,18 +243,18 @@ public class SimpleParser {
             case Identifier:
                 String var = node.getText();
                 if (!variableTable.containsKey(var)) {
-                    throw new RuntimeException(var+" is undefined.");
+                    throw new MyParseException(var+" is undefined.");
                 }
                 Integer val = variableTable.get(var);
                 if (Objects.isNull(val)) {
-                    throw new RuntimeException(var+" has not been initialized");
+                    throw new MyParseException(var+" has not been initialized");
                 }
                 result = val.intValue();
                 break;
             case AssignmentStmt:
                 var = node.getText();
                 if (!variableTable.containsKey(var)) {
-                    throw new RuntimeException(var+" is undefined");
+                    throw new MyParseException(var+" is undefined");
                 }
             case IntDeclaration:
                 var = node.getText();
