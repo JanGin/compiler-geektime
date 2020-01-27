@@ -17,8 +17,8 @@ public enum TokenType {
     MULTIPLE,       // *
     DIVIDE,         // /
     SemiColon,      // ;
-    LF_BRACKET,     // (
-    RH_BRACKET,     // )
+    LF_PAREN,     // (
+    RH_PAREN,     // )
     LF_BRACE,       // {
     RH_BRACE,       // }
     DBPLUS,         // ++

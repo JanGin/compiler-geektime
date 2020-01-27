@@ -237,10 +237,10 @@ public class SimpleLexer {
             token.setTokenType(TokenType.SemiColon);
         } else if (ch == '(') {
             state = DFAState.LF_BRACKET;
-            token.setTokenType(TokenType.LF_BRACKET);
+            token.setTokenType(TokenType.LF_PAREN);
         } else if (ch == ')') {
             state = DFAState.RH_BRACKET;
-            token.setTokenType(TokenType.RH_BRACKET);
+            token.setTokenType(TokenType.RH_PAREN);
         } else if (ch == '{') {
             state = DFAState.LF_BRACE;
             token.setTokenType(TokenType.LF_BRACE);

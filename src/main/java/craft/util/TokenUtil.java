@@ -40,11 +40,11 @@ public class TokenUtil {
     }
 
     public static boolean isLeftBracket(Token token) {
-        return Objects.nonNull(token) && TokenType.LF_BRACKET.equals(token.getTokenType());
+        return Objects.nonNull(token) && TokenType.LF_PAREN.equals(token.getTokenType());
     }
 
     public static boolean isRightBracket(Token token) {
-        return Objects.nonNull(token) && TokenType.RH_BRACKET.equals(token.getTokenType());
+        return Objects.nonNull(token) && TokenType.RH_PAREN.equals(token.getTokenType());
     }
 
     public static boolean isMultiple(Token token) {
