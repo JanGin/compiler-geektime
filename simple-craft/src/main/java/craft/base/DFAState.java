@@ -43,7 +43,7 @@ public enum DFAState {
     //private String token;
 
     /*
-    craft.base.DFAState(String token) {
+    DFAState(String token) {
         this.token = token;
     }
     */

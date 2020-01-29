@@ -6,7 +6,6 @@ import craft.base.Token;
 import craft.base.TokenType;
 import craft.util.SimpleTokenReader;
 import craft.util.TokenReader;
-import craft.util.TokenUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +79,7 @@ public class SimpleLexer {
                         state = DFAState.Int_n;
                         token.setTokenType(TokenType.Int_n);
                         tokenText.append(ch);
-                    } else if (!TokenUtil.isBlank(ch)) {
+                    } else if (!isBlank(ch)) {
                         state = DFAState.Id;
                         token.setTokenType(TokenType.Identifier);
                         tokenText.append(ch);
@@ -93,7 +92,7 @@ public class SimpleLexer {
                         state = DFAState.Int;
                         token.setTokenType(TokenType.Int);
                         tokenText.append(ch);
-                    } else if (!TokenUtil.isBlank(ch)) {
+                    } else if (!isBlank(ch)) {
                         state = DFAState.Id;
                         token.setTokenType(TokenType.Identifier);
                         tokenText.append(ch);

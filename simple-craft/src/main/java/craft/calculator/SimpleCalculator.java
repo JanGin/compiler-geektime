@@ -7,10 +7,9 @@ import craft.base.Token;
 import craft.exception.MyParseException;
 import craft.lexer.SimpleLexer;
 import craft.util.TokenReader;
+import craft.util.TokenUtil;
 
 import java.util.Objects;
-
-import static craft.util.TokenUtil.*;
 
 /**
  *  该class所使用的语法规则：
@@ -113,19 +112,19 @@ public class SimpleCalculator {
     public SimpleASTNode primary(TokenReader reader) throws MyParseException {
         SimpleASTNode node = null;
         Token token = reader.peek();
-        if (isIdentifier(token)) {
+        if (TokenUtil.isIdentifier(token)) {
             token = reader.read();
             node = new SimpleASTNode(ASTNodeType.Identifier, token.getTokenText());
-        } else if (isIntLiteral(token)) {
+        } else if (TokenUtil.isIntLiteral(token)) {
             token = reader.read();
             node = new SimpleASTNode(ASTNodeType.IntLiteral, token.getTokenText());
-        } else if (isLeftBracket(token)) {
+        } else if (TokenUtil.isLeftBracket(token)) {
             token = reader.read();
             node = additive(reader);
 
             if (Objects.nonNull(node)) {
                 token = reader.peek();      //继续往下解析
-                if (isRightBracket(token)) {
+                if (TokenUtil.isRightBracket(token)) {
                     token = reader.read();
                 } else {
                     throw new MyParseException("expect right bracket ')' here");
@@ -178,7 +177,7 @@ public class SimpleCalculator {
             while (true) {
                 //循环运用 mul (+ mul)* 中的   (+ mul)*
                 Token token = reader.peek();
-                if (isPlus(token) || isMinus(token)) {
+                if (TokenUtil.isPlus(token) || TokenUtil.isMinus(token)) {
                     token = reader.read();
                     SimpleASTNode child2 = multiplicative(reader);
                     node = new SimpleASTNode(ASTNodeType.AdditiveExpr, token.getTokenText());
@@ -206,7 +205,7 @@ public class SimpleCalculator {
         SimpleASTNode node = child1;
         Token token = reader.peek();
         if (Objects.nonNull(child1) && Objects.nonNull(token)) {
-            if (isMultiple(token) || isDivide(token)) {
+            if (TokenUtil.isMultiple(token) || TokenUtil.isDivide(token)) {
                 token = reader.read();
                 SimpleASTNode child2 = primary(reader);
                 if (Objects.nonNull(child2)) {
@@ -215,7 +214,7 @@ public class SimpleCalculator {
                     node.addChild(child2);
                 } else {
                     String symbol = null;
-                    if (isMultiple(token))
+                    if (TokenUtil.isMultiple(token))
                         symbol = "*";
                     else
                         symbol = "/";
@@ -234,13 +233,13 @@ public class SimpleCalculator {
     public SimpleASTNode intDeclaration(TokenReader reader) throws MyParseException {
         SimpleASTNode node = null;
         Token token = reader.peek();        //预读
-        if (isInt(token)) {
+        if (TokenUtil.isInt(token)) {
             token = reader.read();          //读出int
-            if (isIdentifier(reader.peek())) {    //接着读
+            if (TokenUtil.isIdentifier(reader.peek())) {    //接着读
                 token = reader.read();      //读出标识符
                 /*此处只建立表达式子节点*/
                 node = new SimpleASTNode(ASTNodeType.IntDeclaration, token.getTokenText());
-                if (isAssignment(reader.peek())) {
+                if (TokenUtil.isAssignment(reader.peek())) {
                     token = reader.read();   //读出 =
                     SimpleASTNode child = additive(reader);   //此处期待一个表达式，并返回一个AST节点
                     if (Objects.nonNull(child)) {
@@ -256,7 +255,7 @@ public class SimpleCalculator {
             if (Objects.nonNull(node)) {
                 // 读取 ;
                 token = reader.peek();
-                if (isSemiColon(reader.peek())) {
+                if (TokenUtil.isSemiColon(reader.peek())) {
                     token = reader.read();
                 } else {
                     throw new MyParseException("Invalid statement, semicolon ';' is excepted");
