@@ -266,7 +266,7 @@ public class SimpleLexer {
 
     public void dumpText(TokenReader reader) {
         System.out.println("[text]\t[type]");
-        Token token = null;
+        Token token;
         while (Objects.nonNull(token = reader.read())) {
             System.out.println(token.getTokenText()+"\t\t"+token.getTokenType());
         }

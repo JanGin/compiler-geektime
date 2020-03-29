@@ -37,6 +37,7 @@
     <modules>
         <module>antlr-test</module>
         <module>simple-craft</module>
+        <module>playscript-java</module>
     </modules>
 
 
